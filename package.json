@@ -5,7 +5,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "node --experimental-strip-types __tests__/run.js"
+    "test": "node --experimental-strip-types __tests__/run.ts"
   },
   "keywords": [],
   "author": "Dmitry Soshnikov",

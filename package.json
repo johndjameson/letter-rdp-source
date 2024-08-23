@@ -5,7 +5,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --experimental-strip-types __tests__/run.js"
   },
   "keywords": [],
   "author": "Dmitry Soshnikov",

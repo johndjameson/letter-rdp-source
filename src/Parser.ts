@@ -1,6 +1,6 @@
 import { Tokenizer } from "./Tokenizer.ts";
 
-type TokenType = "NUMBER";
+type TokenType = "NUMBER" | "STRING";
 
 /**
  * Letter parser: recursive descent implementation
@@ -31,8 +31,19 @@ export class Parser {
   private Program() {
     return {
       type: "Program",
-      body: this.NumericLiteral(),
+      body: this.Literal(),
     };
+  }
+
+  private Literal() {
+    switch (this.#lookahead?.type) {
+      case "NUMBER":
+        return this.NumericLiteral();
+      case "STRING":
+        return this.StringLiteral();
+      default:
+        throw new SyntaxError("Literal: unexpected literal production");
+    }
   }
 
   private NumericLiteral() {
@@ -41,6 +52,15 @@ export class Parser {
     return {
       type: "NumericLiteral",
       value: Number(token.value),
+    };
+  }
+
+  private StringLiteral() {
+    const token = this.eat("STRING");
+
+    return {
+      type: "StringLiteral",
+      value: token.value.slice(1, -1), // Remove quotes
     };
   }
 

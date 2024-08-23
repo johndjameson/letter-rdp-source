@@ -20,6 +20,14 @@ export class Tokenizer {
   }
 
   /**
+   * Whether the tokenization has reached the end of the file
+   */
+
+  private isEOF() {
+    return this.#cursor === this.#string.length;
+  }
+
+  /**
    * Obtains next token
    */
   getNextToken() {
@@ -39,6 +47,21 @@ export class Tokenizer {
       return {
         type: "NUMBER",
         value: number,
+      };
+    }
+
+    if (string[0] === '"') {
+      let s = "";
+
+      do {
+        s += string[this.#cursor++];
+      } while (string[this.#cursor] !== '"' && !this.isEOF());
+
+      s += this.#cursor++;
+
+      return {
+        type: "STRING",
+        value: s,
       };
     }
 

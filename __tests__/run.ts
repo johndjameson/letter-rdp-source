@@ -1,9 +1,4 @@
 import { Parser } from "../src/Parser.ts";
 
-const parser = new Parser();
-
-const program = "42";
-
-const ast = parser.parse(program);
-
-console.log(JSON.stringify(ast, null, 2));
+console.log(JSON.stringify(new Parser().parse("123"), null, 2));
+console.log(JSON.stringify(new Parser().parse('"foo"'), null, 2));

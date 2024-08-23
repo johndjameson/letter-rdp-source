@@ -9,9 +9,7 @@
 /**
  * Letter parser: recursive descent implementation.
  */
-class Parser {
-
-}
+class Parser {}
 
 module.exports = {
   Parser,

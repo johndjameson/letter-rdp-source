@@ -1,3 +1,14 @@
+import type { TokenType } from "./types.ts";
+
+const Spec: [RegExp, TokenType: TokenType][] = [
+  [/^\s+/, null], // Whitespace
+  [/^\/\/.*/, null], // Single-line comment
+  [/^\/\*[\s\S]*?\*\//, null], // Multi-line comment
+  [/^\d+/, "NUMBER"], // Number
+  [/^'[^']*'/, "STRING"], // Single-quoted string
+  [/^"[^"]*"/, "STRING"], // Double-quoted string
+];
+
 /**
  * Tokenizer class: Lazily pulls a token from a string
  */
@@ -20,14 +31,6 @@ export class Tokenizer {
   }
 
   /**
-   * Whether the tokenization has reached the end of the file
-   */
-
-  private isEOF() {
-    return this.#cursor === this.#string.length;
-  }
-
-  /**
    * Obtains next token
    */
   getNextToken() {
@@ -37,28 +40,35 @@ export class Tokenizer {
 
     const string = this.#string.slice(this.#cursor);
 
-    let matched = /^\d+/.exec(string); // Number literal
+    for (const [regexp, tokenType] of Spec) {
+      const tokenValue = this.match(regexp, string);
 
-    if (matched) {
-      this.#cursor += matched[0].length;
+      if (!tokenValue) {
+        continue;
+      }
 
-      return {
-        type: "NUMBER",
-        value: matched[0],
-      };
-    }
-
-    matched = /^(['"])((?!\1).)*\1$/.exec(string); // Double quote string literal
-
-    if (matched) {
-      this.#cursor += matched[0].length;
+      if (!tokenType) {
+        return this.getNextToken();
+      }
 
       return {
-        type: "STRING",
-        value: matched[0],
+        type: tokenType,
+        value: tokenValue,
       };
     }
 
     return null;
+  }
+
+  private match(regexp: RegExp, string: string) {
+    const matched = string.match(regexp);
+
+    if (!matched) {
+      return null;
+    }
+
+    this.#cursor += matched[0].length;
+
+    return matched[0];
   }
 }

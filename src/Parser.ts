@@ -1,6 +1,5 @@
 import { Tokenizer } from "./Tokenizer.ts";
-
-type TokenType = "NUMBER" | "STRING";
+import type { TokenType } from "./types.ts";
 
 /**
  * Letter parser: recursive descent implementation

@@ -37,33 +37,25 @@ export class Tokenizer {
 
     const string = this.#string.slice(this.#cursor);
 
-    if (!Number.isNaN(Number(string[0]))) {
-      let number = "";
+    let matched = /^\d+/.exec(string); // Number literal
 
-      while (!Number.isNaN(Number(string[this.#cursor]))) {
-        number += string[this.#cursor++];
-      }
+    if (matched) {
+      this.#cursor += matched[0].length;
 
       return {
         type: "NUMBER",
-        value: number,
+        value: matched[0],
       };
     }
 
-    if (string[0] === '"') {
-      let s = "";
+    matched = /^(['"])((?!\1).)*\1$/.exec(string); // Double quote string literal
 
-      do {
-        s += string[this.#cursor++];
-      } while (string[this.#cursor] !== '"' && !this.isEOF());
-
-      // s += this.#cursor++; // Author’s implementation adds a number to the end
-      s += string[this.#cursor];
-      this.#cursor++;
+    if (matched) {
+      this.#cursor += matched[0].length;
 
       return {
         type: "STRING",
-        value: s,
+        value: matched[0],
       };
     }
 

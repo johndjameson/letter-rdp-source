@@ -57,7 +57,9 @@ export class Tokenizer {
         s += string[this.#cursor++];
       } while (string[this.#cursor] !== '"' && !this.isEOF());
 
-      s += this.#cursor++;
+      // s += this.#cursor++; // Author’s implementation adds a number to the end
+      s += string[this.#cursor];
+      this.#cursor++;
 
       return {
         type: "STRING",

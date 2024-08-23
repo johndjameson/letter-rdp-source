@@ -47,6 +47,8 @@ export class Parser {
   }
 
   private NumericLiteral() {
+    const token = this.eat("NUMBER");
+
     return {
       type: "NumericLiteral",
       value: Number(token.value),
